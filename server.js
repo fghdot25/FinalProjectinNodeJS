@@ -1,16 +1,17 @@
 var express = require('express');
-var bodyParser = require('body-parser');
-var _ = require('underscore');
-var db = require('./db.js');
+	var bodyParser = require('body-parser');
+		var _ = require('underscore');
+			var db = require('./db.js');
+
 var app = express();
-var PORT = process.env.PORT || 3000;
-var ratings = [];
-var ratingsNextId = 1;
+	var PORT = process.env.PORT || 3000;
+		var ratings = [];
+			var ratingsNextId = 1;
 
 app.use(bodyParser.json());
 
 app.get('/', function(req, res){
-	res.send("API ROOT"); 
+	res.send("HTML page"); 
 });
 
 
@@ -70,11 +71,11 @@ db.rating.findById(ratingsId).then(function (rating){
 //POST
 
 app.post('/ratings', function(req, res){
-	var body = _.pick(req.body, 'lastName', 'name', 'course', 'attendance','rate1', 'rate2','subtotal', 'exam','total' );
+	var body = _.pick(req.body, 'lastName', 'name', 'course', 'attendance','rate1', 'rate2','subtotal', 'exam','total','letter', 'trad_rate' );
+		if (body.hasOwnProperty('rate1') && body.rate1>100){
+	     Attributes.rate1=body.rate1;
+	  	} 
 
-	if (body.hasOwnProperty('rate1') && body.rate1>100){
-		Attributes.rate1 = body.rate1;
-	} 
 	if (body.hasOwnProperty('rate2') && body.rate2>100){
 		Attributes.rate2 = body.rate2;
 	} 
@@ -85,6 +86,22 @@ app.post('/ratings', function(req, res){
 	body.subtotal = Math.round(((body.rate1+body.rate2)/2)*0.6);
 	body.total = body.subtotal + body.exam;
 
+	// rating letters
+/*if(body.total<=49){
+	res.send();
+	console.log("F - Fail(Неудовлетворительно!)");
+}
+if(body.total>=50 && body.total<=74){
+	console.log("C (Удовлетворительно!)");
+}
+if(body.total>=75 && body.total<=89){
+	console.log("B (Хорошо!)");
+}
+if(body.total>=90){
+	Attributes.letter = body.letter;
+	res.send(JSON.stringify("A - (Отлично!)"));
+	console.log("A (Отлично!)");
+} */
 	db.rating.create(body).then(function (rating) {
 		res.json(rating.toJSON());
 	}, function (e) {

@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
 		course: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			defaultValue: 'yes',
+			defaultValue: 'Курс атын енгиз',
 			validate: {
 				len: [1, 250]
 			}
@@ -55,5 +55,11 @@ module.exports = function(sequelize, DataTypes) {
 			allowNull: false,
 			defaultValue: 0
 		}
-	});
+	},
+    {
+		timestamps: false,  
+		freezeTableName: true
+	}
+
+	);
 };
