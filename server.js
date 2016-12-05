@@ -11,7 +11,8 @@ var app = express();
 app.use(bodyParser.json());
 
 app.get('/', function(req, res){
-	res.send("HTML page"); 
+	app.use(express.static(__dirname + '/'));
+    res.sendFile('/index.html', {root: __dirname })
 });
 
 
@@ -96,22 +97,6 @@ app.post('/ratings', function(req, res){
 			body.letter = 'A';
 			body.trad_rate = 5;
 		}
-	// rating letters
-/*if(body.total<=49){
-	res.send();
-	console.log("F - Fail(Неудовлетворительно!)");
-}
-if(body.total>=50 && body.total<=74){
-	console.log("C (Удовлетворительно!)");
-}
-if(body.total>=75 && body.total<=89){
-	console.log("B (Хорошо!)");
-}
-if(body.total>=90){
-	Attributes.letter = body.letter;
-	res.send(JSON.stringify("A - (Отлично!)"));
-	console.log("A (Отлично!)");
-} */
 	} else
 	{
 		res.status(403).send({"Қате шықты":"Қойылған бағалардың біреуі немесе барлығы да қою керек бағадан жоғары. Қойылған бағаларды қайтадан тексеріп көрруіңізді сұраймын?"});
@@ -185,6 +170,10 @@ app.put('/ratings/:id',function(req, res){
 
 db.sequelize.sync().then(function() {
 	app.listen(PORT, function() {
-		console.log('Экспресс ' + PORT + ' деген портты қолданып тұр!');
+		console.log('');
+		console.log('Экспресс ' + PORT + ' портын қолданып тұр!');
+		
+		console.log('');
+		console.log('POST - қа жіберетін шаблонды алу үшін || LOCALHOST:'+PORT+' || деген адреске браузер арқылы өтіңіз!');
 	});
 });
