@@ -20,27 +20,27 @@ app.get('/', function(req, res){
 app.get('/ratings', function(req, res){
 	var query = req.query;
 	var  where ={};
-	if(query.hasOwnProperty('attendance') && query.attendance === 'true'){
+	if(query.hasOwnProperty('attendance') && query.attendance === 'true')
+	{
 		where.attendance = true;
-	} else if(query.hasOwnProperty('attendance') && query.attendance === 'false'){
+	} else if(query.hasOwnProperty('attendance') && query.attendance === 'false')
+	{
 		where.attendance = false;
 	}
 
-	if(query.hasOwnProperty('l') && query.l.length>0){
+	if(query.hasOwnProperty('l') && query.l.length>0)
+	{
  		where.lastName={
  			$like: '%'+query.l+'%'
  		};
 	}
-	else if(query.hasOwnProperty('n') && query.n.length>0){
+	else if(query.hasOwnProperty('n') && query.n.length>0)
+	{
  		where.name={
  			$like: '%'+query.n+'%'
  		};
 	}
-	else if(query.hasOwnProperty('c') && query.c.length>0){
- 		where.course={
- 			$like: '%'+query.c+'%'
- 		};
-	}
+	
 	db.rating.findAll({where: where}).then(function(rating){
 		res.json(rating);
 	}, function(e){
@@ -54,11 +54,14 @@ app.get('/ratings', function(req, res){
 app.get('/ratings/:id', function(req,res){
 	var ratingsId = parseInt(req.params.id, 10);
 
-db.rating.findById(ratingsId).then(function (rating){
-	if(!!rating){
+db.rating.findById(ratingsId).then(function (rating)
+{
+	if(!!rating)
+	{
 		res.json(rating.toJSON());
-	} else{
-		res.status(404).send({"Ошибка": "Студент  c id "+ratingsId+" не найден!"});
+	} else
+	{
+		res.status(404).send({"Қате шықты": " "+ratingsId+" - деген id номері бар студент табылмады!"});
 	}
 }, function(e){
 	res.status(500).send();
@@ -71,46 +74,32 @@ db.rating.findById(ratingsId).then(function (rating){
 //POST
 
 app.post('/ratings', function(req, res){
-	var body = _.pick(req.body, 'lastName', 'name', 'course', 'attendance','rate1', 'rate2','subtotal', 'exam','total','letter', 'trad_rate' );
-		if (body.hasOwnProperty('rate1') && body.rate1>100){
-	     Attributes.rate1=body.rate1;
-	  	} 
+	var body = _.pick(req.body, 'lastName', 'name', 'attendance','rate1', 'rate2','subtotal', 'exam','total' );
+	if(body.rate1<=100 && body.rate2<=100 && body.exam<=40) 
+	{
+		body.subtotal = Math.round(((body.rate1+body.rate2)/2)*0.6);
+		body.total = body.subtotal + body.exam;
+	} else
+	{
+		res.status(403).send({"Қате шықты":"Қойылған бағалардың біреуі немесе барлығы да қою керек бағадан жоғары. Қойылған бағаларды қайтадан тексеріп көрруіңізді сұраймын?"});
+	}
+	
 
-	if (body.hasOwnProperty('rate2') && body.rate2>100){
-		Attributes.rate2 = body.rate2;
-	} 
-	if (body.hasOwnProperty('exam') && body.exam>40){
-		Attributes.exam = body.exam;
-	} 
-
-	body.subtotal = Math.round(((body.rate1+body.rate2)/2)*0.6);
-	body.total = body.subtotal + body.exam;
-
-	// rating letters
-/*if(body.total<=49){
-	res.send();
-	console.log("F - Fail(Неудовлетворительно!)");
-}
-if(body.total>=50 && body.total<=74){
-	console.log("C (Удовлетворительно!)");
-}
-if(body.total>=75 && body.total<=89){
-	console.log("B (Хорошо!)");
-}
-if(body.total>=90){
-	Attributes.letter = body.letter;
-	res.send(JSON.stringify("A - (Отлично!)"));
-	console.log("A (Отлично!)");
-} */
+if (body.hasOwnProperty('rate1') && body.hasOwnProperty('rate2')  && body.hasOwnProperty('exam')) 
+		{
+			res.status(200).send({
+				Succesfully: "Сіз жазған ақпарат сәтті енгізілді!",
+				ЕСКЕРТУ:" Қойылған бағаларды өзгертуге мүмкіндігіңіз шектелді!",
+				help: "қате енгізілген ақпаратты өзгерту үшін, оны толықтай өшіру керек!(DELETE)"
+			});
+		} 
 	db.rating.create(body).then(function (rating) {
 		res.json(rating.toJSON());
-	}, function (e) {
-		res.status(400).json(e);
+}, function(e) 
+	{
+		res.status(500).send();
 	});
 });
-
-
-
 
 // ratings/delete
 app.delete('/ratings/:id', function(req, res){
@@ -122,7 +111,7 @@ app.delete('/ratings/:id', function(req, res){
 	 }).then (function (rowsDeleted){
 	 	if(rowsDeleted ===0){
 	 		res.status(404).json({
-	 			error: "Ошибка: Студент  c id "+ratingsId+" не найден!"
+	 			error: "]Студент  c id "+ratingsId+" не найден!"
 	 		});
 	 	} else {
 	 		res.status(204).send();
@@ -163,6 +152,6 @@ app.put('/ratings/:id',function(req, res){
 
 db.sequelize.sync().then(function() {
 	app.listen(PORT, function() {
-		console.log('Экспресс использует порт ' + PORT + '!');
+		console.log('Экспресс ' + PORT + ' деген портты қолданып тұр!');
 	});
 });

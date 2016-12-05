@@ -14,14 +14,6 @@ module.exports = function(sequelize, DataTypes) {
 				len: [1, 250]
 			}
 		},
-		course: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			defaultValue: 'Курс атын енгиз',
-			validate: {
-				len: [1, 250]
-			}
-		},
 		attendance: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
