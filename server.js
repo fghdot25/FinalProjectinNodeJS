@@ -79,6 +79,39 @@ app.post('/ratings', function(req, res){
 	{
 		body.subtotal = Math.round(((body.rate1+body.rate2)/2)*0.6);
 		body.total = body.subtotal + body.exam;
+
+
+		// rating letters
+
+		if(body.total<=49){
+			body.letter = 'F';
+			body.trad_rate = 2;
+		} else if(body.total>=50 && body.total<=74){
+			body.letter = 'C';
+			body.trad_rate = 3;
+		}else if(body.total>=75 && body.total<=89){
+			body.letter = 'B';
+			body.trad_rate = 4;
+		}else if(body.total>=90){
+			body.letter = 'A';
+			body.trad_rate = 5;
+		}
+	// rating letters
+/*if(body.total<=49){
+	res.send();
+	console.log("F - Fail(Неудовлетворительно!)");
+}
+if(body.total>=50 && body.total<=74){
+	console.log("C (Удовлетворительно!)");
+}
+if(body.total>=75 && body.total<=89){
+	console.log("B (Хорошо!)");
+}
+if(body.total>=90){
+	Attributes.letter = body.letter;
+	res.send(JSON.stringify("A - (Отлично!)"));
+	console.log("A (Отлично!)");
+} */
 	} else
 	{
 		res.status(403).send({"Қате шықты":"Қойылған бағалардың біреуі немесе барлығы да қою керек бағадан жоғары. Қойылған бағаларды қайтадан тексеріп көрруіңізді сұраймын?"});
@@ -94,7 +127,7 @@ if (body.hasOwnProperty('rate1') && body.hasOwnProperty('rate2')  && body.hasOwn
 			});
 		} 
 	db.rating.create(body).then(function (rating) {
-		res.json(rating.toJSON());
+		
 }, function(e) 
 	{
 		res.status(500).send();

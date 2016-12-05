@@ -32,21 +32,34 @@ module.exports = function(sequelize, DataTypes) {
 		},
 
 		subtotal: {
-			type: DataTypes.DOUBLE,
+			type: DataTypes.INTEGER,
 			allowNull: false,
 			defaultValue: 0
 		},
 		exam: {
-			type: DataTypes.DOUBLE,
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0
+		},
+		total: {
+			type: DataTypes.INTEGER,
 			allowNull: false,
 			defaultValue: 0
 		},
 
-		total: {
-			type: DataTypes.DOUBLE,
+		letter: {
+			type: DataTypes.CHAR,
 			allowNull: false,
-			defaultValue: 0
+			defaultValue: 'F'
+		},
+
+		trad_rate: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 2
 		}
+
+		
 	},
     {
 		timestamps: false,  
