@@ -1,12 +1,12 @@
 var express = require('express');
-	var bodyParser = require('body-parser');
-		var _ = require('underscore');
-			var db = require('./db.js');
+var bodyParser = require('body-parser');
+var _ = require('underscore');
+var db = require('./db.js');
 
 var app = express();
-	var PORT = process.env.PORT || 3000;
-		var ratings = [];
-			var ratingsNextId = 1;
+var PORT = process.env.PORT || 3000;
+var ratings = [];
+var ratingsNextId = 1;
 
 app.use(bodyParser.json());
 
@@ -82,7 +82,7 @@ app.post('/ratings', function(req, res){
 		body.total = body.subtotal + body.exam;
 
 
-		// rating letters
+		// rating letters and trad_rate
 
 		if(body.total<=49){
 			body.letter = 'F';
@@ -129,7 +129,7 @@ app.delete('/ratings/:id', function(req, res){
 	 }).then (function (rowsDeleted){
 	 	if(rowsDeleted ===0){
 	 		res.status(404).json({
-	 			error: "]Студент  c id "+ratingsId+" не найден!"
+	 			error: "Студент  c id "+ratingsId+" не найден!"
 	 		});
 	 	} else {
 	 		res.status(204).send();
