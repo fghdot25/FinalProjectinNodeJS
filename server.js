@@ -175,5 +175,7 @@ db.sequelize.sync().then(function() {
 		
 		console.log('');
 		console.log('POST - қа жіберетін шаблонды алу үшін || LOCALHOST:'+PORT+' || деген адреске браузер арқылы өтіңіз!');
+console.log('');
+			console.log('НЕМЕСЕ түпкі папкаға өтіп'+' Templates for POST'+' файлымен қолдааныңыз!');
 	});
 });
